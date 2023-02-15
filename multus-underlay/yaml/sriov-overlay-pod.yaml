@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: demo
+  name: demo
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: demo
+  template:
+    metadata:
+      annotations:
+        ipam.spidernet.io/subnets: '[{"interface":"net1","ipv4":["vlan100-v4"],"ipv6":["vlan100-v6"]}]'
+      labels:
+        app: demo
+    spec:
+      containers:
+        - image: busybox
+          imagePullPolicy: IfNotPresent
+          name: demo
+          command: ["/bin/sh", "-c", "trap : TERM INT; sleep infinity & wait"]
+          resources:
+            requests:
+              intel.com/sriov_netdevice_enp0: '1'
+            limits:
+              intel.com/sriov_netdevice_enp0: '1'
