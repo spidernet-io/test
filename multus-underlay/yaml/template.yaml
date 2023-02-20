@@ -1,0 +1,210 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: t-<POD_NAME_PREFIX>-server
+  name: t-<POD_NAME_PREFIX>-server
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: t-<POD_NAME_PREFIX>-server
+  template:
+    metadata:
+      annotations:
+        # <POD_ANNO>
+      labels:
+        app: t-<POD_NAME_PREFIX>-server
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: <NODE1>
+      containers:
+        - command:
+            - /bin/bash
+            - -cex
+            - "#!/bin/bash \nnetserver \niperf3 -s \nsleep infinity\n"
+          image: bzsun123/perf:v1
+          imagePullPolicy: IfNotPresent
+          name: t-<POD_NAME_PREFIX>-server
+          resources:
+            requests:
+              # <POD_RESOURCES_REQUESTS>
+            limits:
+              # <POD_RESOURCES_LIMITS>
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: t-<POD_NAME_PREFIX>-pod-same-node
+  name: t-<POD_NAME_PREFIX>-pod-same-node
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: t-<POD_NAME_PREFIX>-pod-same-node
+  template:
+    metadata:
+      annotations:
+        # <POD_ANNO>
+      labels:
+        app: t-<POD_NAME_PREFIX>-pod-same-node
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: <NODE1>
+      containers:
+        - image: bzsun123/perf:v1
+          imagePullPolicy: IfNotPresent
+          name: t-<POD_NAME_PREFIX>-pod-same-node
+          resources:
+            requests:
+              # <POD_RESOURCES_REQUESTS>
+            limits:
+              # <POD_RESOURCES_LIMITS>
+          command:
+            - "/bin/sh"
+          args:
+            - "-c"
+            - "sleep infinity"
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: t-<POD_NAME_PREFIX>-host-same-node-server
+  name: t-<POD_NAME_PREFIX>-host-same-node-server
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: t-<POD_NAME_PREFIX>-host-same-node-server
+  template:
+    metadata:
+      annotations:
+        # <POD_ANNO>
+      labels:
+        app: t-<POD_NAME_PREFIX>-host-same-node-server
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      nodeSelector:
+        kubernetes.io/hostname: <NODE1>
+      containers:
+        - command:
+            - /bin/bash
+            - -cex
+            - "#!/bin/bash \nnetserver \niperf3 -s \nsleep infinity\n"
+          image: bzsun123/perf:v1
+          imagePullPolicy: IfNotPresent
+          name: t-<POD_NAME_PREFIX>-host-same-node-server
+          resources:
+            requests:
+              # <POD_RESOURCES_REQUESTS>
+            limits:
+              # <POD_RESOURCES_LIMITS>
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: t-<POD_NAME_PREFIX>-host-dif-node-client
+  name: t-<POD_NAME_PREFIX>-host-dif-node-client
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: t-<POD_NAME_PREFIX>-host-dif-node-client
+  template:
+    metadata:
+      annotations:
+        # <POD_ANNO>
+      labels:
+        app: t-<POD_NAME_PREFIX>-host-dif-node-client
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      nodeSelector:
+        kubernetes.io/hostname: <NODE2>
+      containers:
+        - image: bzsun123/perf:v1
+          imagePullPolicy: IfNotPresent
+          name: t-<POD_NAME_PREFIX>-host-dif-node-client
+          resources:
+            requests:
+              # <POD_RESOURCES_REQUESTS>
+            limits:
+              # <POD_RESOURCES_LIMITS>
+          command:
+            - "/bin/sh"
+          args:
+            - "-c"
+            - "sleep infinity"
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: t-<POD_NAME_PREFIX>-pod-dif-node
+  name: t-<POD_NAME_PREFIX>-pod-dif-node
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: t-<POD_NAME_PREFIX>-pod-dif-node
+  template:
+    metadata:
+      annotations:
+        # <POD_ANNO>
+      labels:
+        app: t-<POD_NAME_PREFIX>-pod-dif-node
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: <NODE2>
+      containers:
+        - image: bzsun123/perf:v1
+          imagePullPolicy: IfNotPresent
+          name: t-<POD_NAME_PREFIX>-pod-dif-node
+          resources:
+            requests:
+              # <POD_RESOURCES_REQUESTS>
+            limits:
+              # <POD_RESOURCES_LIMITS>
+          command:
+            - "/bin/sh"
+          args:
+            - "-c"
+            - "sleep infinity"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: t-<POD_NAME_PREFIX>-server-svc
+  namespace: default
+spec:
+  ports:
+    - name: iperf3-tcp
+      port: 5201
+      protocol: TCP
+      targetPort: 5201
+    - name: netperf-tcp
+      port: 12865
+      protocol: TCP
+      targetPort: 12865
+  selector:
+    app: t-<POD_NAME_PREFIX>-server
+  type: ClusterIP

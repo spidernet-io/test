@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: demo
+  name: demo
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: demo
+  template:
+    metadata:
+      annotations:
+        ipam.spidernet.io/subnets: '[{"interface":"eth0","ipv4":["default-v4-subnet"],"ipv6":["default-v6-subnet"]}]'
+        v1.multus-cni.io/default-network: kube-system/macvlan-standalone-vlan0
+      labels:
+        app: demo
+    spec:
+      containers:
+        - image: busybox
+          imagePullPolicy: IfNotPresent
+          name: demo
+          command: ["/bin/sh", "-c", "trap : TERM INT; sleep infinity & wait"]
