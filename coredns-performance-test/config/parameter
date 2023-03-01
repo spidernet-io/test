@@ -1,0 +1,24 @@
+KUBE_CONFIG=../kube_config/kube.config
+
+#COREDNS_CPU=(0.1:70 1:250 2:500 3:1000)
+COREDNS_CPU=(0.1:70)
+
+#QUERY_FILE=(dnstest.txt podip.txt queries.txt)
+QUERY_FILE=(dnstest.txt)
+
+#取得node节点的coredns和nodelocaldns地址
+NODELOCALIP=${4:-"169.254.25.10"}
+COREDNS_SERVER_IP=$(kubectl --kubeconfig=${KUBE_CONFIG} get pod -A -o wide|grep coredns|sed -n '/node1/p'|awk '{print $7'})
+LOCALDNS_SERVER_IP=$(kubectl --kubeconfig=${KUBE_CONFIG}  get pod -A -o wide|grep nodelocaldns|sed -n '/node1/p'|awk '{print $7'})
+COREDNS_CLUSTER_IP=$(kubectl --kubeconfig=${KUBE_CONFIG} get svc -A -o wide|grep coredns|sed -n '1,1p'|awk '{print $4'})
+MODE_IP=($COREDNS_SERVER_IP $NODELOCALIP $COREDNS_CLUSTER_IP)
+
+n=100
+Quests=($((7*$n)) $((8*$n)) $((9*$n)))
+
+MOSTTIME=10
+
+MODE=(coredns localdns clusterip)
+coredns="coredns"
+localdns="localdns"
+clusterip="clusterip"

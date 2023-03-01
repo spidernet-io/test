@@ -1,0 +1,16 @@
+daodns-service A
+daodns-service AAAA
+daodns-service.cluster.local A
+daodns-service.cluster.local AAAA
+daodns-service.svc.cluster.local A
+daodns-service.svc.cluster.local AAAA
+daodns-service.default.svc.cluster.local A
+daodns-service.default.svc.cluster.local AAAA
+baidu.com.svc.cluster.local A
+baidu.com.svc.cluster.local AAAA
+baidu.com.default.svc.cluster.local A
+baidu.com.default.svc.cluster.local AAAA
+baidu.com.cluster.local A
+baidu.com.cluster.local AAAA
+baidu.com A
+baidu.com AAAA
