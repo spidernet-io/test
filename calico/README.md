@@ -68,4 +68,11 @@ dmesg | grep init_module
 [  196.678314] init_module,kube_ovn_fast_path
 ```
 
+卸载模块:
+
+```shell
+cd centos8.x
+make uninstall
+```
+
 性能调整主要参考 [kube-ovn性能调优](https://kubeovn.github.io/docs/v1.11.x/advance/performance-tuning/)

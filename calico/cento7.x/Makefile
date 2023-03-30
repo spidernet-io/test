@@ -1,4 +1,4 @@
-MODULE_NAME:=kube_ovn_fastpath
+MODULE_NAME:=fastpath
 ifneq ($(KERNELRELEASE),)
 mymodule-objs:=${MODULE_NAME}.o
 obj-m:=${MODULE_NAME}.o
