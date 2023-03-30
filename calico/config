@@ -1,0 +1,4 @@
+# physical interface name
+PhysicalInterface=ens192
+# enable fastPath
+EnableFastPath=false
