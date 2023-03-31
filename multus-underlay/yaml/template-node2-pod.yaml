@@ -1,0 +1,77 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: t-<POD_NAME_PREFIX>-host-dif-node-client
+  name: t-<POD_NAME_PREFIX>-host-dif-node-client
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: t-<POD_NAME_PREFIX>-host-dif-node-client
+  template:
+    metadata:
+      annotations:
+      # <POD_ANNO>
+      labels:
+        app: t-<POD_NAME_PREFIX>-host-dif-node-client
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      nodeSelector:
+        kubernetes.io/hostname: <NODE2>
+      containers:
+        - image: bzsun123/perf:v1
+          imagePullPolicy: IfNotPresent
+          name: t-<POD_NAME_PREFIX>-host-dif-node-client
+          resources:
+            requests:
+            # <POD_RESOURCES_REQUESTS>
+            limits:
+            # <POD_RESOURCES_LIMITS>
+          command:
+            - "/bin/sh"
+          args:
+            - "-c"
+            - "sleep infinity"
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: t-<POD_NAME_PREFIX>-pod-dif-node
+  name: t-<POD_NAME_PREFIX>-pod-dif-node
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: t-<POD_NAME_PREFIX>-pod-dif-node
+  template:
+    metadata:
+      annotations:
+      # <POD_ANNO>
+      labels:
+        app: t-<POD_NAME_PREFIX>-pod-dif-node
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: <NODE2>
+      containers:
+        - image: bzsun123/perf:v1
+          imagePullPolicy: IfNotPresent
+          name: t-<POD_NAME_PREFIX>-pod-dif-node
+          resources:
+            requests:
+            # <POD_RESOURCES_REQUESTS>
+            limits:
+            # <POD_RESOURCES_LIMITS>
+          command:
+            - "/bin/sh"
+          args:
+            - "-c"
+            - "sleep infinity"

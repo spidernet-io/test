@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: demo
+  name: demo
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: demo
+  template:
+    metadata:
+      annotations:
+      labels:
+        app: demo
+    spec:
+      containers:
+        - image: busybox
+          imagePullPolicy: IfNotPresent
+          name: demo
+          command: ["/bin/sh", "-c", "trap : TERM INT; sleep infinity & wait"]
