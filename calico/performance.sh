@@ -9,10 +9,10 @@ source config
 echo "PhysicalInterface: ${PhysicalInterface}"
 
 # tuning NIC queue
-PRE_SET_RX=`ethtool -g ens192 | sed -n '3p' | egrep -o  '[0-9]*$' `
-PRE_SET_TX=`ethtool -g ens192 | sed -n '6p' | egrep -o  '[0-9]*$'`
-CURRENT_RX=`ethtool -g ens192 | sed -n '8p' | egrep -o  '[0-9]*$'`
-CURRENT_TX=`ethtool -g ens192 | sed -n '11p' | egrep -o  '[0-9]*$'`
+PRE_SET_RX=`ethtool -g ${PhysicalInterface} | sed -n '3p' | egrep -o  '[0-9]*$' `
+PRE_SET_TX=`ethtool -g ${PhysicalInterface} | sed -n '6p' | egrep -o  '[0-9]*$'`
+CURRENT_RX=`ethtool -g ${PhysicalInterface} | sed -n '8p' | egrep -o  '[0-9]*$'`
+CURRENT_TX=`ethtool -g ${PhysicalInterface} | sed -n '11p' | egrep -o  '[0-9]*$'`
 
 echo "PRE_SET_RX: ${PRE_SET_RX}"
 echo "PRE_SET_TX: ${PRE_SET_TX}"
