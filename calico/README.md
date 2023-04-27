@@ -4,7 +4,13 @@
 
 - centos8: 4.18.0-448.el8.x86_64
 
-## 结果
+## 依赖命令
+
+- qperf
+- tuned-adm
+- cpupower
+- gcc
+- make
 
 测试命令:
 
@@ -68,4 +74,14 @@ dmesg | grep init_module
 [  196.678314] init_module,kube_ovn_fast_path
 ```
 
-性能调整主要参考 [kube-ovn性能调优](https://kubeovn.github.io/docs/v1.11.x/advance/performance-tuning/)
+卸载模块:
+
+```shell
+cd centos8.x
+make uninstall
+```
+
+性能调整主要参考:
+
+- https://kubeovn.github.io/docs/v1.11.x/advance/performance-tuning/
+- https://github.com/cilium/kubenetbench

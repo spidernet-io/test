@@ -1,0 +1,15 @@
+CILIUM_NAMESPACE="kube-system"
+
+CILIUM_CONFIG_MAP_NAME="cilium-config"
+# !!!!
+# physical interface, must in your node!!
+DEVICE=""
+
+# tuning cilium
+# only true if is master node
+# it's false if is worker node
+TUNING_CILIUM=true
+
+# enable github proxy
+GITHUB_PROXY="https://ghproxy.com"
+
